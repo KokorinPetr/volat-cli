@@ -1,0 +1,57 @@
+{
+  "name": "volat",
+  "version": "1.0.0",
+  "description": "Interactive CLI for screening volatile cryptocurrencies across exchanges.",
+  "type": "module",
+  "bin": {
+    "volat": "./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KokorinPetr/volat-cli.git"
+  },
+  "homepage": "https://github.com/KokorinPetr/volat-cli#readme",
+  "bugs": {
+    "url": "https://github.com/KokorinPetr/volat-cli/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cli",
+    "crypto",
+    "trading",
+    "volatility",
+    "screener",
+    "coingecko",
+    "coinmarketcap",
+    "terminal"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    ".env.example"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "start": "tsx src/index.ts",
+    "start:ts-node": "node --loader ts-node/esm src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run typecheck && npm run build",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.1",
+    "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
+    "conf": "^13.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3"
+  }
+}
