@@ -4,6 +4,8 @@
 
 Designed for arbitrage and market-scanning workflows — run a guided terminal wizard, pick your providers and filters, and get a ranked list of volatile assets in seconds.
 
+![volat-screener workflow](./media/example_workflow.gif)
+
 ---
 
 ## Features
@@ -18,20 +20,31 @@ Designed for arbitrage and market-scanning workflows — run a guided terminal w
 
 ## Quick Start
 
-### Install globally
+### Option 1 — Run once, no installation
 
-```bash
-npm install -g volat-screener
-volat-screener
-```
-
-### Or run without installing
+Launches the screener immediately without installing anything permanently:
 
 ```bash
 npx volat-screener
 ```
 
-No cloning required. On first launch the wizard will ask for your API keys and save them for future runs.
+### Option 2 — Install globally, run anytime
+
+Downloads and installs the CLI once. After that you can run it anytime just by typing `volat-screener`:
+
+```bash
+npm install -g volat-screener
+```
+
+Then launch it whenever you need it:
+
+```bash
+volat-screener
+```
+
+---
+
+On first launch (either option) the setup wizard will ask for your API keys and save them — you won't need to enter them again.
 
 ---
 
@@ -192,22 +205,11 @@ All exchange options and provider-specific ID aliases (e.g. `OKX` vs `okex`) liv
 
 Contributions are welcome — bug reports, new provider connectors, filter improvements, or documentation fixes.
 
-Before opening a pull request:
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide, including how to add providers, fix exchange mappings, and what to check before opening a PR.
 
-```bash
-npm run typecheck
-```
+Have a feature idea or just want to share feedback? [Open an issue](https://github.com/KokorinPetr/volat-cli/issues) or reach out directly at [kokorin.petr27@gmail.com](mailto:kokorin.petr27@gmail.com).
 
-If you add a provider or exchange mapping, keep these files aligned:
-
-- [`src/types/index.ts`](./src/types/index.ts)
-- [`src/config/exchanges.ts`](./src/config/exchanges.ts)
-- [`src/providers/index.ts`](./src/providers/index.ts)
-- [`.env.example`](./.env.example)
-
-**If this project is useful to you, please consider giving it a star. It helps others find it and motivates continued development.**
-
-Have a feature idea or found a bug? [Open an issue](https://github.com/KokorinPetr/volat-cli/issues) — feedback of all kinds is appreciated.
+**If this project is useful to you, please consider giving it a star — it helps others find it and motivates continued development.**
 
 ---
 
