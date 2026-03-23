@@ -1,10 +1,10 @@
 {
-  "name": "volat",
+  "name": "volat-screener",
   "version": "1.0.0",
   "description": "Interactive CLI for screening volatile cryptocurrencies across exchanges.",
   "type": "module",
   "bin": {
-    "volat": "./dist/index.js"
+    "volat-screener": "dist/index.js"
   },
   "repository": {
     "type": "git",

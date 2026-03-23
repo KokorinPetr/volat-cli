@@ -1,0 +1,9 @@
+Rank,Ticker,Name,Current Price,24h Low,24h High,24h Volume,Volatility %,Providers,Selected Exchanges,Top 3 Exchanges
+102,FET,Artificial Superintelligence Alliance,0.18338348129844756,0.158248,0.192505,169378064.8143412,21.647666953136856,coingecko; coinmarketcap,OKX; Bybit,Binance; BTCC; WhiteBIT
+244,KMNO,Kamino,0.022459399066618098,0.01874828,0.02227871,10047006.100482525,18.830687401724326,coingecko; coinmarketcap,OKX; Bybit,Orca; Binance; BitMart
+239,TOSHI,Toshi,0.0002291141851385351,0.00020577,0.00023715,18698914.890593205,15.250036448461868,coingecko; coinmarketcap,Bybit; OKX,Upbit; BitMart; Bybit
+96,VIRTUAL,Virtuals Protocol,0.780503,0.695502,0.782917,101066919,12.568619500734727,coingecko,Bybit; OKX,Binance; Upbit; Bithumb
+204,AR,Arweave,1.928101020371338,1.76,1.98,40205987.709048495,12.499999999999998,coingecko; coinmarketcap,OKX; Bybit,Binance; WhiteBIT; CoinW
+160,GRT,The Graph,0.027417453539379303,0.02578247,0.02899743,86461273.33455017,12.469557804197981,coingecko; coinmarketcap,Bybit; OKX,Binance; Websea; BTCC
+89,PENGU,Pudgy Penguins,0.0078048485058147335,0.00694305,0.00780789,122727161.8530238,12.456197204398636,coingecko; coinmarketcap,OKX; Bybit,Binance; Websea; BTCC
+94,BONK,Bonk,0.00000649,0.00000586,0.00000658,78312598,12.28668941979522,coingecko,Bybit; OKX,Binance; FameEX; Upbit

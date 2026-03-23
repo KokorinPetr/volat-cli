@@ -1,73 +1,83 @@
-# volat
+# volat-screener
 
-Interactive TypeScript CLI for finding high-volatility crypto assets across configurable market-cap ranges and exchange filters.
+> Interactive CLI for finding high-volatility crypto assets across configurable market-cap ranges and exchange filters.
 
-The CLI is designed for arbitrage and market-scanning workflows:
+Designed for arbitrage and market-scanning workflows — run a guided terminal wizard, pick your providers and filters, and get a ranked list of volatile assets in seconds.
 
-- step-by-step terminal wizard with `@clack/prompts`
-- provider-based market data architecture
-- exchange-aware screening
-- optional CSV export
+---
 
-## Installation
+## Features
 
-### Requirements
+- Step-by-step terminal wizard powered by `@clack/prompts`
+- Multi-provider market data architecture (CoinGecko, CoinMarketCap)
+- Exchange-aware screening with `any` / `all` match modes
+- Optional CSV export of results
+- Persistent credential storage — set up once, reuse forever
+
+---
+
+## Quick Start
+
+### Install globally
+
+```bash
+npm install -g volat-screener
+volat-screener
+```
+
+### Or run without installing
+
+```bash
+npx volat-screener
+```
+
+No cloning required. On first launch the wizard will ask for your API keys and save them for future runs.
+
+---
+
+## Requirements
 
 - Node.js `20+`
-- npm
+- A free [CoinGecko API key](https://www.coingecko.com/en/api) (demo plan works)
+- Optionally a [CoinMarketCap API key](https://coinmarketcap.com/api/)
 
-### Local Development
+---
 
-```bash
-npm install
-npm run start
-```
+## Usage
 
-On first launch, `volat` opens a setup wizard and asks for the provider API keys it needs. The values are saved in the user config directory via `conf` and reused on later runs.
-
-If you prefer environment variables instead of saved local config, copy `.env.example` to `.env` and fill in only the providers you plan to use.
-
-### Launching As `volat`
-
-For local development on your machine:
+### Run the screener
 
 ```bash
-npm run build
-npm link
-volat
+volat-screener
 ```
 
-After publishing to npm, users will be able to run it without cloning the repository:
+You will be prompted to choose:
+
+1. Market data providers
+2. Market-cap rank range
+3. Minimum volatility threshold
+4. Number of results to show
+5. Target exchanges
+6. Exchange match mode: `any` or `all`
+7. Optional CSV export
+
+### Manage saved credentials
 
 ```bash
-npm install -g volat
-volat
+volat-screener config
 ```
 
-or:
+Opens the credential wizard so you can add, rotate, or remove API keys.
 
-```bash
-npx volat
-```
-
-To open the saved credential manager later:
-
-```bash
-volat config
-```
-
-### Useful Scripts
-
-```bash
-npm run start
-npm run dev
-npm run typecheck
-npm run build
-```
+---
 
 ## Configuration
 
-Environment variables are defined in [`.env.example`](./.env.example).
+Copy `.env.example` to `.env` if you prefer environment variables over saved config:
+
+```bash
+cp .env.example .env
+```
 
 ### Supported Variables
 
@@ -77,139 +87,130 @@ COINGECKO_API_PLAN=demo
 COINMARKETCAP_API_KEY=your_coinmarketcap_api_key_here
 ```
 
-### Credential Priority
+### Credential Resolution Order
 
-The CLI resolves provider credentials in this order:
-
-1. environment variables
-2. persistent local config saved by `volat config`
-3. manual setup wizard input
-
-Persistent config is stored with the `conf` library in the system default user config directory.
+1. Environment variables (`.env` or shell)
+2. Persistent local config saved by `volat-screener config`
+3. Setup wizard input at first launch
 
 ### Notes
 
-- `COINGECKO_API_KEY` is required if you use the `CoinGecko` provider.
+- `COINGECKO_API_KEY` is required when using the CoinGecko provider.
 - `COINGECKO_API_PLAN` must be `demo` or `pro`.
-- `COINMARKETCAP_API_KEY` is required if you use the `CoinMarketCap` provider.
-- With the current implementation, `CoinGecko` must be included for full screening because it provides the 24h high/low and exchange ticker data needed by the volatility and exchange filters.
-- `CoinMarketCap` currently contributes additional market data into the merged provider result set, but does not currently satisfy all filter requirements on its own.
-- If no usable credentials are found at startup, `volat` opens a one-time setup wizard and saves the values for future runs.
-- Running `volat config` opens the credential wizard again so users can rotate keys or add providers later.
+- `COINMARKETCAP_API_KEY` is required when using the CoinMarketCap provider.
+- CoinGecko must be included for full screening — it provides 24h high/low and exchange ticker data used by the volatility and exchange filters.
+- CoinMarketCap contributes additional market data into the merged result set but does not currently satisfy all filter requirements on its own.
 
-### Runtime Flow
+---
 
-When you run the CLI, you will be prompted for:
+## Local Development
 
-1. market data providers
-2. market-cap rank range
-3. minimum volatility threshold
-4. result count
-5. target exchanges
-6. exchange match mode: `any` or `all`
-7. optional CSV export after results are shown
+```bash
+git clone https://github.com/KokorinPetr/volat-cli.git
+cd volat-cli
+npm install
+npm run start
+```
 
-## Adding New Providers
+### Useful Scripts
 
-The project is structured so new providers can be added without rewriting the screening engine.
+| Command | Description |
+|---|---|
+| `npm run start` | Run with `tsx` (no build step) |
+| `npm run dev` | Same as start |
+| `npm run typecheck` | Type-check without emitting |
+| `npm run build` | Compile to `dist/` |
 
-### Provider Contract
+### Link locally as `volat-screener`
 
-Every provider must implement the `MarketDataConnector` interface in [`src/types/index.ts`](./src/types/index.ts).
+```bash
+npm run build
+npm link
+volat-screener
+```
 
-A provider is expected to expose:
-
-- `id`
-- `label`
-- `supportsVolatilityData`
-- `supportsExchangeTickers`
-- `fetchCoinsForRankRange(config)`
-- `fetchCoinTickers(coinId, exchangeIds?)`
-
-### Where to Add a Provider
-
-1. Create a connector in [`src/providers/`](./src/providers).
-   Example: [`src/providers/coingecko.ts`](./src/providers/coingecko.ts)
-
-2. Register it in [`src/providers/index.ts`](./src/providers/index.ts)
-
-3. Add its selectable metadata to [`src/constants.ts`](./src/constants.ts)
-
-4. Add any provider-specific environment handling in [`src/env.ts`](./src/env.ts)
-
-### Data Model Expectations
-
-Providers should normalize external API responses into:
-
-- `MarketCoin`
-- `CoinTicker`
-
-These shared types live in [`src/types/index.ts`](./src/types/index.ts).
-
-If multiple providers return the same asset, the app merges them in [`src/aggregation.ts`](./src/aggregation.ts):
-
-- one coin appears only once in results
-- numeric fields are averaged across providers
-- source provider metadata is preserved
-
-### Exchange Configuration
-
-Exchange options and provider-specific exchange aliases are defined in [`src/config/exchanges.ts`](./src/config/exchanges.ts).
-
-If you need to:
-
-- add a new selectable exchange
-- fix provider-specific exchange ids
-- normalize naming mismatches such as `OKX` vs `okex`
-
-this is the single place to update.
-
-### Screening Rules
-
-Core screening logic is isolated in [`src/engine/ScreenerEngine.ts`](./src/engine/ScreenerEngine.ts).
-
-This includes:
-
-- stablecoin filtering
-- volatility calculation
-- minimum volume filtering
-- exchange matching logic
-- top-exchange extraction
+---
 
 ## Project Structure
 
 ```text
 src/
   config/
-    exchanges.ts
+    exchanges.ts       # Exchange options and provider-specific aliases
   engine/
-    ScreenerEngine.ts
+    ScreenerEngine.ts  # Core screening logic
   providers/
     coingecko.ts
     coinmarketcap.ts
     index.ts
   types/
-    index.ts
-  aggregation.ts
+    index.ts           # Shared interfaces: MarketCoin, CoinTicker, etc.
+  aggregation.ts       # Multi-provider result merging
   enrichment.ts
-  export.ts
-  prompts.ts
-  table.ts
+  export.ts            # CSV export
+  prompts.ts           # Wizard UI
+  table.ts             # Terminal table rendering
   app.ts
   index.ts
 ```
 
-## Development
+---
 
-Before opening a pull request, at minimum run:
+## Adding New Providers
+
+The architecture is designed so new providers can be added without touching the screening engine.
+
+### Provider Contract
+
+Implement the `MarketDataConnector` interface from [`src/types/index.ts`](./src/types/index.ts):
+
+| Member | Description |
+|---|---|
+| `id` | Unique provider identifier |
+| `label` | Display name |
+| `supportsVolatilityData` | Whether provider supplies high/low data |
+| `supportsExchangeTickers` | Whether provider supplies exchange listings |
+| `fetchCoinsForRankRange(config)` | Fetch coins by market-cap rank |
+| `fetchCoinTickers(coinId, exchangeIds?)` | Fetch exchange ticker data |
+
+### Steps to Add a Provider
+
+1. Create a connector in [`src/providers/`](./src/providers) — see [`coingecko.ts`](./src/providers/coingecko.ts) as a reference.
+2. Register it in [`src/providers/index.ts`](./src/providers/index.ts).
+3. Add selectable metadata to [`src/constants.ts`](./src/constants.ts).
+4. Add environment variable handling to [`src/env.ts`](./src/env.ts).
+
+Providers normalize external responses into `MarketCoin` and `CoinTicker`. When multiple providers return the same asset, [`src/aggregation.ts`](./src/aggregation.ts) merges them — deduplicating coins, averaging numeric fields, and preserving per-provider metadata.
+
+### Exchange Configuration
+
+All exchange options and provider-specific ID aliases (e.g. `OKX` vs `okex`) live in [`src/config/exchanges.ts`](./src/config/exchanges.ts). This is the single place to update when adding or fixing exchange support.
+
+---
+
+## Contributing
+
+Contributions are welcome — bug reports, new provider connectors, filter improvements, or documentation fixes.
+
+Before opening a pull request:
 
 ```bash
 npm run typecheck
 ```
 
-If you add a new provider or exchange mapping, keep the following aligned:
+If you add a provider or exchange mapping, keep these files aligned:
 
 - [`src/types/index.ts`](./src/types/index.ts)
 - [`src/config/exchanges.ts`](./src/config/exchanges.ts)
 - [`src/providers/index.ts`](./src/providers/index.ts)
 - [`.env.example`](./.env.example)
+
+**If this project is useful to you, please consider giving it a star. It helps others find it and motivates continued development.**
+
+Have a feature idea or found a bug? [Open an issue](https://github.com/KokorinPetr/volat-cli/issues) — feedback of all kinds is appreciated.
+
+---
+
+## License
+
+MIT — see [LICENSE](./LICENSE).

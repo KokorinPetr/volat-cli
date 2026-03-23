@@ -9,7 +9,7 @@ interface VolatPersistentConfig {
 }
 
 const store = new Conf<VolatPersistentConfig>({
-  projectName: "volat",
+  projectName: "volat-screener",
   configName: "config",
   schema: {
     coingeckoApiKey: {

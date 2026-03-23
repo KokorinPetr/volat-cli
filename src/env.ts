@@ -57,7 +57,7 @@ export function getCoinGeckoConfig() {
   const plan = readCoinGeckoPlan();
   const apiKey = readRequiredValue(
     readOptionalValue("COINGECKO_API_KEY") ?? getStoredCoinGeckoApiKey(),
-    "Missing CoinGecko API key. Set COINGECKO_API_KEY, save it with `volat config`, or complete the setup wizard."
+    "Missing CoinGecko API key. Set COINGECKO_API_KEY, save it with `volat-screener config`, or complete the setup wizard."
   );
 
   return {
@@ -71,7 +71,7 @@ export function getCoinGeckoConfig() {
 export function getCoinMarketCapConfig() {
   const apiKey = readRequiredValue(
     readOptionalValue("COINMARKETCAP_API_KEY") ?? getStoredCoinMarketCapApiKey(),
-    "Missing CoinMarketCap API key. Set COINMARKETCAP_API_KEY, save it with `volat config`, or complete the setup wizard."
+    "Missing CoinMarketCap API key. Set COINMARKETCAP_API_KEY, save it with `volat-screener config`, or complete the setup wizard."
   );
 
   return {
